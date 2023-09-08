@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter_springboot/pages/search_page.dart';
+import 'package:project_flutter_springboot/pages/search_result_page.dart';
+import 'package:project_flutter_springboot/providers/app_data_provider.dart';
+import 'package:project_flutter_springboot/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppDataProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +26,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.lightGreen,
         brightness: Brightness.dark,
       ),
-      home: const SearchPage(),
+      // home: const SearchPage(),
+      initialRoute: routeNameHome,
+      routes: {
+        routeNameHome: (context) => const SearchPage(),
+        routeNameSearchResultPage: (context) => const SearchResultPage(),
+      },
     );
   }
 }

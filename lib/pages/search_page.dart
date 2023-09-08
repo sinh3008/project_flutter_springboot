@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter_springboot/datasource/temp_db.dart';
+import 'package:project_flutter_springboot/providers/app_data_provider.dart';
 import 'package:project_flutter_springboot/utils/helper_functions.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/constants.dart';
 
@@ -139,14 +141,12 @@ class _SearchPageState extends State<SearchPage> {
       return;
     }
     if (_formKey.currentState!.validate()) {
-      try {
-        final route = TempDB.tableRoute.firstWhere((element) =>
-            element.cityFrom == fromCity && element.cityTo == toCity);
-        showMsg(context, route.routeName);
-        
-      } on StateError catch (error) {
-        showMsg(context, 'No route found');
-      }
+      Provider.of<AppDataProvider>(context, listen: false)
+          .getRouteByCityFromAndCityTo(fromCity!, toCity!)
+          .then((route) {
+        Navigator.pushNamed(context, routeNameSearchResultPage,
+            arguments: [route, getFormattedDate(departureDate!)]);
+      });
     }
   }
 }
