@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter_springboot/pages/booking_confirmation_page.dart';
 import 'package:project_flutter_springboot/pages/search_page.dart';
 import 'package:project_flutter_springboot/pages/search_result_page.dart';
 import 'package:project_flutter_springboot/pages/seat_plan_page.dart';
@@ -33,6 +34,8 @@ class MyApp extends StatelessWidget {
         routeNameHome: (context) => const SearchPage(),
         routeNameSearchResultPage: (context) => const SearchResultPage(),
         routeNameSeatPlanPage: (context) => const SeatPlanPage(),
+        routeNameBookingConfirmationPage: (context) =>
+            const BookingConfirmationPage(),
       },
     );
   }

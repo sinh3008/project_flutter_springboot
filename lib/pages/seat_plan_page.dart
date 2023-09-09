@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter_springboot/custom_widgets/seat_plan_widgets.dart';
 import 'package:project_flutter_springboot/models/bus_schedule.dart';
+import 'package:project_flutter_springboot/providers/app_data_provider.dart';
 import 'package:project_flutter_springboot/utils/colors.dart';
 import 'package:project_flutter_springboot/utils/constants.dart';
+import 'package:project_flutter_springboot/utils/helper_functions.dart';
+import 'package:provider/provider.dart';
 
 class SeatPlanPage extends StatefulWidget {
   const SeatPlanPage({super.key});
@@ -26,7 +29,20 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
     final argList = ModalRoute.of(context)!.settings.arguments as List;
     schedule = argList[0];
     departureDate = argList[1];
+    _getData();
     super.didChangeDependencies();
+  }
+
+  _getData() async {
+    final resList = await Provider.of<AppDataProvider>(context, listen: false)
+        .getReservationsByScheduleAndDepartureDate(
+            schedule.scheduleId!, departureDate);
+    List<String> seats = [];
+    for (final res in resList) {
+      totalSeatBooked += res.totalSeatBooked;
+      seats.add((res.seatNumbers));
+    }
+    bookedSeatNumbers = seats.join(',');
   }
 
   @override
@@ -101,10 +117,8 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
                   onSeatSelected: (value, seat) {
                     if (value) {
                       selectedSeats.add(seat);
-                      print(selectedSeats.length);
-                    }else{
+                    } else {
                       selectedSeats.remove(seat);
-                      print(selectedSeats.length);
                     }
                     selectedSeatStringNotifier.value = selectedSeats.join(',');
                   },
@@ -116,7 +130,19 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
               ),
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (selectedSeats.isEmpty) {
+                  showMsg(context, 'Please select your seat first');
+                  return;
+                }
+                Navigator.pushNamed(context, routeNameBookingConfirmationPage,
+                    arguments: [
+                      departureDate,
+                      schedule,
+                      selectedSeatStringNotifier.value,
+                      selectedSeats.length
+                    ]);
+              },
               child: const Text('Next'),
             ),
           ],
