@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter_springboot/pages/search_page.dart';
 import 'package:project_flutter_springboot/pages/search_result_page.dart';
+import 'package:project_flutter_springboot/pages/seat_plan_page.dart';
 import 'package:project_flutter_springboot/providers/app_data_provider.dart';
 import 'package:project_flutter_springboot/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       routes: {
         routeNameHome: (context) => const SearchPage(),
         routeNameSearchResultPage: (context) => const SearchResultPage(),
+        routeNameSeatPlanPage: (context) => const SeatPlanPage(),
       },
     );
   }

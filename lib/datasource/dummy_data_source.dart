@@ -89,10 +89,12 @@ class DummyDataSource extends DataSource {
     throw UnimplementedError();
   }
 
+  //phương thức này trả về list lịch trình xe bus
   @override
-  Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) {
-    // TODO: implement getSchedulesByRouteName
-    throw UnimplementedError();
+  Future<List<BusSchedule>> getSchedulesByRouteName(String routeName) async {
+    return TempDB.tableSchedule
+        .where((schedule) => schedule.busRoute.routeName == routeName)
+        .toList();
   }
 
   @override
