@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter_springboot/custom_widgets/seat_plan_widgets.dart';
 import 'package:project_flutter_springboot/models/bus_schedule.dart';
 import 'package:project_flutter_springboot/utils/colors.dart';
+import 'package:project_flutter_springboot/utils/constants.dart';
 
 class SeatPlanPage extends StatefulWidget {
   const SeatPlanPage({super.key});
@@ -91,6 +93,17 @@ class _SeatPlanPageState extends State<SeatPlanPage> {
               builder: (context, value, _) => Text(
                 'Selected: $value',
                 style: const TextStyle(fontSize: 16),
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: SeatPlanView(
+                  onSeatSelected: (value, seat) {},
+                  totalSeat: schedule.bus.totalSeat,
+                  bookedSeatNumbers: bookedSeatNumbers,
+                  totalSeatBooked: totalSeatBooked,
+                  isBusinessClass: schedule.bus.busType == busTypeACBusiness,
+                ),
               ),
             ),
             OutlinedButton(
