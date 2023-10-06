@@ -6,19 +6,23 @@ import '../models/bus_model.dart';
 import '../models/bus_reservation.dart';
 import '../models/bus_schedule.dart';
 import '../models/but_route.dart';
+import '../models/reservation_expansion_item.dart';
 import '../models/response_model.dart';
 
 class AppDataProvider extends ChangeNotifier {
   List<Bus> _busList = [];
   List<BusRoute> _routeList = [];
-  List<BusReservation> _reervationList = [];
+  List<BusReservation> _reservationList = [];
   List<BusSchedule> _scheduleList = [];
-  List<BusSchedule> get scheduleList => _scheduleList;
-  List<Bus> get busList => _busList;
-  List<BusRoute> get routeList => _routeList;
-  List<BusReservation> get reservationList => _reervationList;
-  final DataSource _dataSource = DummyDataSource();
 
+  List<BusSchedule> get scheduleList => _scheduleList;
+
+  List<Bus> get busList => _busList;
+
+  List<BusRoute> get routeList => _routeList;
+
+  List<BusReservation> get reservationList => _reservationList;
+  final DataSource _dataSource = DummyDataSource();
 
   Future<ResponseModel> addReservation(BusReservation reservation) {
     return _dataSource.addReservation(reservation);
@@ -37,5 +41,26 @@ class AppDataProvider extends ChangeNotifier {
       int scheduleId, String departureDate) async {
     return _dataSource.getReservationsByScheduleAndDepartureDate(
         scheduleId, departureDate);
+  }
+
+  List<ReservationExpansionItem> getExpansionItems() {
+    return List.generate(_reservationList.length, (index) {
+      final reservation = _reservationList[index];
+      return ReservationExpansionItem(
+        header: ReservationExpansionHeader(
+          reservationId: reservation.reservationId,
+          departureDate: reservation.departureDate,
+          schedule: reservation.busSchedule,
+          timestamp: reservation.timestamp,
+          reservationStatus: reservation.reservationStatus,
+        ),
+        body: ReservationExpansionBody(
+          customer: reservation.customer,
+          totalSeatBooked: reservation.totalSeatBooked,
+          seatNumbers: reservation.seatNumbers,
+          totalPrice: reservation.totalPrice,
+        ),
+      );
+    });
   }
 }
