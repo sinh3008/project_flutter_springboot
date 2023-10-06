@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter_springboot/datasource/temp_db.dart';
+import 'package:project_flutter_springboot/drawers/main_drawer.dart';
 import 'package:project_flutter_springboot/providers/app_data_provider.dart';
 import 'package:project_flutter_springboot/utils/helper_functions.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +21,17 @@ class _SearchPageState extends State<SearchPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    fromCity = 'Dhaka';
+    toCity = 'Sylhet';
+    departureDate = DateTime.now();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer:  const MainDrawer(),
       appBar: AppBar(
         title: const Text('Search'),
         centerTitle: true,
