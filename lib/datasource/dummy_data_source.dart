@@ -7,6 +7,7 @@ import 'package:project_flutter_springboot/models/bus_reservation.dart';
 import 'package:project_flutter_springboot/models/bus_schedule.dart';
 import 'package:project_flutter_springboot/models/but_route.dart';
 import 'package:project_flutter_springboot/models/response_model.dart';
+import 'package:project_flutter_springboot/utils/constants.dart';
 
 class DummyDataSource extends DataSource {
   @override
@@ -16,9 +17,15 @@ class DummyDataSource extends DataSource {
   }
 
   @override
-  Future<ResponseModel> addReservation(BusReservation reservation) {
-    // TODO: implement addReservation
-    throw UnimplementedError();
+  Future<ResponseModel> addReservation(BusReservation reservation) async {
+    TempDB.tableReservation.add(reservation);
+    print(TempDB.tableReservation.length);
+    return ResponseModel(
+      responseStatus: ResponseStatus.SAVED,
+      statusCode: 200,
+      message: 'Your reservation has been saved',
+      object: {},
+    );
   }
 
   @override

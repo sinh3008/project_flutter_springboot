@@ -44,8 +44,8 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
       schedule = argList[1];
       seatNumbers = argList[2];
       totalSeatsBooked = argList[3];
+      isFirst = false;
     }
-    isFirst = false;
     super.didChangeDependencies();
   }
 
@@ -155,31 +155,31 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
                     ),
                     Text(
                       'Email Address: ${emailController.text}',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Text(
                       'Route: ${schedule.busRoute.routeName}',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Text(
                       'Departure Date: $departureDate',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Text(
                       'Departure Time: ${schedule.departureTime}',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Text(
                       'Ticket Price: $currency${schedule.ticketPrice}',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Text(
                       'Total Seat(s): $totalSeatsBooked',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Text(
                       'Seat Number(s): $seatNumbers',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Text(
                       'Discount: ${schedule.discount}%',
@@ -191,7 +191,7 @@ class _BookingConfirmationPageState extends State<BookingConfirmationPage> {
                     ),
                     Text(
                       'Grand Total: $currency${getGrandTotal(schedule.discount, totalSeatsBooked, schedule.ticketPrice, schedule.processingFee)}',
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ],
                 ),
