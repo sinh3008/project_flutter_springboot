@@ -22,10 +22,16 @@ class AppDataProvider extends ChangeNotifier {
   List<BusRoute> get routeList => _routeList;
 
   List<BusReservation> get reservationList => _reservationList;
+
   final DataSource _dataSource = DummyDataSource();
 
   Future<ResponseModel> addReservation(BusReservation reservation) {
     return _dataSource.addReservation(reservation);
+  }
+
+  Future<void> getAllReservations() async {
+    _reservationList = await _dataSource.getAllReservation();
+    notifyListeners();
   }
 
   Future<BusRoute?> getRouteByCityFromAndCityTo(
