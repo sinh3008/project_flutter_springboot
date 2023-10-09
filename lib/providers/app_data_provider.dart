@@ -29,9 +29,14 @@ class AppDataProvider extends ChangeNotifier {
     return _dataSource.addReservation(reservation);
   }
 
-  Future<void> getAllReservations() async {
+  Future<List<BusReservation>> getAllReservations() async {
     _reservationList = await _dataSource.getAllReservation();
     notifyListeners();
+    return  _reservationList;
+  }
+
+  Future<List<BusReservation>> getReservationByMobile(String mobile) {
+    return _dataSource.getReservationsByMobile(mobile);
   }
 
   Future<BusRoute?> getRouteByCityFromAndCityTo(
@@ -49,9 +54,9 @@ class AppDataProvider extends ChangeNotifier {
         scheduleId, departureDate);
   }
 
-  List<ReservationExpansionItem> getExpansionItems() {
-    return List.generate(_reservationList.length, (index) {
-      final reservation = _reservationList[index];
+  List<ReservationExpansionItem> getExpansionItems(List<BusReservation> reservationList) {
+    return List.generate(reservationList.length, (index) {
+      final reservation = reservationList[index];
       return ReservationExpansionItem(
         header: ReservationExpansionHeader(
           reservationId: reservation.reservationId,

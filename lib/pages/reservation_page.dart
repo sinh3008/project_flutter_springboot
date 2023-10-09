@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter_springboot/custom_widgets/search_box.dart';
 import 'package:project_flutter_springboot/providers/app_data_provider.dart';
+import 'package:project_flutter_springboot/utils/helper_functions.dart';
 import 'package:provider/provider.dart';
 
 import '../custom_widgets/reservation_item_body_view.dart';
@@ -15,7 +17,6 @@ class ReservationPage extends StatefulWidget {
 
 class _ReservationPageState extends State<ReservationPage> {
   bool isFirst = true;
-
   List<ReservationExpansionItem> items = [];
 
   @override
@@ -27,10 +28,12 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   _getData() async {
-    await Provider.of<AppDataProvider>(context, listen: false)
-        .getAllReservations();
+    final reservations =
+        await Provider.of<AppDataProvider>(context, listen: false)
+            .getAllReservations();
     items = Provider.of<AppDataProvider>(context, listen: false)
-        .getExpansionItems();
+        .getExpansionItems(reservations);
+    setState(() {});
   }
 
   @override
@@ -42,26 +45,41 @@ class _ReservationPageState extends State<ReservationPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SearchBox(onSubmit: (value) {
+              _search(value);
+            }),
             ExpansionPanelList(
-              expansionCallback: (panelIndex, isExpanded) {
+              expansionCallback: (index, isExpanded) {
                 setState(() {
-                  items[panelIndex].isExpanded = !isExpanded;
+                  items[index].isExpanded = !isExpanded;
                 });
               },
               children: items
-                  .map(
-                    (item) => ExpansionPanel(
+                  .map((item) => ExpansionPanel(
                       isExpanded: item.isExpanded,
                       headerBuilder: (context, isExpanded) =>
                           ReservationItemHeaderView(header: item.header),
-                      body: ReservationItemBodyView(body: item.body),
-                    ),
-                  )
+                      body: ReservationItemBodyView(
+                        body: item.body,
+                      )))
                   .toList(),
-            )
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _search(String value) async {
+    final data = await Provider.of<AppDataProvider>(context, listen: false)
+        .getReservationByMobile(value);
+    if (data.isEmpty) {
+      showMsg(context, 'Search Error');
+      return;
+    }
+    setState(() {
+      items = Provider.of<AppDataProvider>(context, listen: false)
+          .getExpansionItems(data);
+    });
   }
 }

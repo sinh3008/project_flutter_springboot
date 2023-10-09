@@ -19,7 +19,7 @@ class ReservationItemHeaderView extends StatelessWidget {
             Text('${header.schedule.busRoute.routeName}-'
                 '${header.schedule.bus.busType}'),
             Text('Booking Time:'
-                ' ${getFormattedDate(DateTime.fromMicrosecondsSinceEpoch(header.timestamp), pattern: 'EEE MMM dd yyyy HH:mm')}'),
+                ' ${getFormattedDate(DateTime.fromMillisecondsSinceEpoch(header.timestamp), pattern: 'EEE MMM dd yyyy HH:mm')}'),
           ],
         ),
       ),

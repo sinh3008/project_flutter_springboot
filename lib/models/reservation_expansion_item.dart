@@ -10,7 +10,7 @@ class ReservationExpansionItem {
   ReservationExpansionItem(
       {required this.header,
       required this.body,
-       this.isExpanded = false});
+       this.isExpanded = true});
 }
 
 class ReservationExpansionHeader {
