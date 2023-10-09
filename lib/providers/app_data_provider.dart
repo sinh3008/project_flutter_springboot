@@ -25,6 +25,14 @@ class AppDataProvider extends ChangeNotifier {
 
   final DataSource _dataSource = DummyDataSource();
 
+  Future<ResponseModel> addBus(Bus bus){
+     return _dataSource.addBus(bus);
+  }
+
+  Future<ResponseModel> addRoute(BusRoute busRoute){
+    return _dataSource.addRoute(busRoute);
+  }
+
   Future<ResponseModel> addReservation(BusReservation reservation) {
     return _dataSource.addReservation(reservation);
   }

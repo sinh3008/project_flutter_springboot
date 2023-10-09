@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter_springboot/providers/app_data_provider.dart';
+import 'package:project_flutter_springboot/utils/helper_functions.dart';
+import 'package:provider/provider.dart';
 
 import '../datasource/temp_db.dart';
 import '../models/bus_model.dart';
@@ -17,6 +20,7 @@ class _AddBusPageState extends State<AddBusPage> {
   final seatController = TextEditingController();
   final nameController = TextEditingController();
   final numberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,21 +41,20 @@ class _AddBusPageState extends State<AddBusPage> {
                   });
                 },
                 validator: (value) {
-                  if(value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return 'Please select a Bus Type';
                   }
                 },
-                decoration: InputDecoration(
-                    errorStyle: const TextStyle(color: Colors.white70)
-                ),
+                decoration: const InputDecoration(
+                    errorStyle: TextStyle(color: Colors.white70)),
                 isExpanded: true,
                 value: busType,
                 hint: const Text('Select Bus Type'),
                 items: busTypes
                     .map((e) => DropdownMenuItem<String>(
-                  value: e,
-                  child: Text(e),
-                ))
+                          value: e,
+                          child: Text(e),
+                        ))
                     .toList(),
               ),
               const SizedBox(
@@ -128,13 +131,21 @@ class _AddBusPageState extends State<AddBusPage> {
   void addBus() {
     if (_formKey.currentState!.validate()) {
       final bus = Bus(
-        busId: TempDB.tableBus.length + 1, // remove this line if you save into MySql DB
+        busId: TempDB.tableBus.length + 1,
+        // remove this line if you save into MySql DB
         busName: nameController.text,
         busNumber: numberController.text,
         busType: busType!,
         totalSeat: int.parse(seatController.text),
       );
-
+      Provider.of<AppDataProvider>(context, listen: false)
+          .addBus(bus)
+          .then((response) {
+        if(response.responseStatus == ResponseStatus.SAVED){
+          showMsg(context, response.message);
+          resetFields();
+        }
+      });
     }
   }
 

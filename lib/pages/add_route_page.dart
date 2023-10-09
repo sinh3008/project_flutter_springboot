@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter_springboot/providers/app_data_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../datasource/temp_db.dart';
 import '../models/but_route.dart';
 import '../utils/constants.dart';
+import '../utils/helper_functions.dart';
 
 class AddRoutePage extends StatefulWidget {
   const AddRoutePage({Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class _AddRoutePageState extends State<AddRoutePage> {
   final _formKey = GlobalKey<FormState>();
   String? from, to;
   final distanceController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +43,9 @@ class _AddRoutePageState extends State<AddRoutePage> {
                 hint: const Text('From'),
                 items: cities
                     .map((e) => DropdownMenuItem<String>(
-                  value: e,
-                  child: Text(e),
-                ))
+                          value: e,
+                          child: Text(e),
+                        ))
                     .toList(),
               ),
               const SizedBox(
@@ -58,9 +62,9 @@ class _AddRoutePageState extends State<AddRoutePage> {
                 hint: const Text('To'),
                 items: cities
                     .map((e) => DropdownMenuItem<String>(
-                  value: e,
-                  child: Text(e),
-                ))
+                          value: e,
+                          child: Text(e),
+                        ))
                     .toList(),
               ),
               const SizedBox(
@@ -109,8 +113,15 @@ class _AddRoutePageState extends State<AddRoutePage> {
         cityTo: to!,
         distanceInKm: double.parse(distanceController.text),
       );
+      Provider.of<AppDataProvider>(context, listen: false).addRoute(route).then((response) {
+        if (response.responseStatus == ResponseStatus.SAVED) {
+          showMsg(context, response.message);
+          resetFields();
+        }
+      });
     }
   }
+
   @override
   void dispose() {
     distanceController.dispose();
